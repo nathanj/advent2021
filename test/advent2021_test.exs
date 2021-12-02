@@ -6,3 +6,8 @@ defmodule Advent2021Test do
     assert Advent2021.hello() == :world
   end
 end
+
+defmodule Day2Test do
+  use ExUnit.Case
+  doctest Day2
+end
