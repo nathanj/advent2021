@@ -12,7 +12,7 @@ defmodule Day1 do
 
   def doit() do
     data =
-      File.stream!("day1.txt")
+      File.stream!("inputs/day1.txt")
       |> Enum.map(&String.trim/1)
       |> Enum.map(&String.to_integer/1)
 

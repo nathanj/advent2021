@@ -32,7 +32,7 @@ defmodule Day4 do
   """
 
   def doit() do
-    doit(File.read!("day4.txt"))
+    doit(File.read!("inputs/day4.txt"))
   end
 
   def doit(data) do
@@ -107,7 +107,7 @@ defmodule Day4 do
       boards = Enum.map(boards, fn board -> mark_called(board, num) end)
 
       if length(boards) == 1 do
-        board = List.first(board)
+        board = List.first(boards)
 
         if is_winner(board) do
           {:halt, {num, board}}

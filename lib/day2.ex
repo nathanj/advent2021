@@ -12,7 +12,7 @@ defmodule Day2 do
 
   def doit() do
     data =
-      File.stream!("day2.txt")
+      File.stream!("inputs/day2.txt")
       |> Enum.map(&String.trim/1)
 
     IO.puts("day 2 pt 1: #{pt1(data)}")
