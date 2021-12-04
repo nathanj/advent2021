@@ -89,9 +89,10 @@ defmodule Day4 do
 
     Enum.reduce_while(called_nums, boards, fn num, boards ->
       boards = Enum.map(boards, fn board -> mark_called(board, num) end)
+      winner = Enum.find(boards, &is_winner/1)
 
-      if Enum.any?(boards, fn board -> is_winner(board) end) do
-        {:halt, {num, Enum.find(boards, &is_winner/1)}}
+      if winner do
+        {:halt, {num, winner}}
       else
         {:cont, boards}
       end
@@ -106,8 +107,10 @@ defmodule Day4 do
       boards = Enum.map(boards, fn board -> mark_called(board, num) end)
 
       if length(boards) == 1 do
-        if is_winner(List.first(boards)) do
-          {:halt, {num, List.first(boards)}}
+        board = List.first(board)
+
+        if is_winner(board) do
+          {:halt, {num, board}}
         else
           {:cont, boards}
         end
