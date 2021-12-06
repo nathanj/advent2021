@@ -40,21 +40,20 @@ defmodule Day5 do
   defp is_horizontal([[x1, _y1], [x2, _y2]]), do: x1 == x2
   defp is_vertical([[_x1, y1], [_x2, y2]]), do: y1 == y2
 
+  defp sign_delta(a, b) do
+    cond do
+      a == b -> 0
+      a > b -> -1
+      a < b -> 1
+    end
+  end
+
   defp generate_line_points(line) do
     [[x1, y1], [x2, y2]] = line
-
-    cond do
-      is_horizontal(line) ->
-        Enum.map(y1..y2, fn y -> [x1, y] end)
-
-      is_vertical(line) ->
-        Enum.map(x1..x2, fn x -> [x, y1] end)
-
-      true ->
-        dx = if x1 < x2, do: 1, else: -1
-        dy = if y1 < y2, do: 1, else: -1
-        Enum.map(0..abs(x2 - x1), fn i -> [x1 + i * dx, y1 + i * dy] end)
-    end
+    dx = sign_delta(x1, x2)
+    dy = sign_delta(y1, y2)
+    length = max(abs(x2 - x1), abs(y2 - y1))
+    Enum.map(0..length, fn i -> [x1 + i * dx, y1 + i * dy] end)
   end
 
   def pt1(data) do
