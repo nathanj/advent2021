@@ -18,8 +18,8 @@ defmodule Day6 do
   end
 
   def doit(data) do
-    IO.puts("day 6 pt 1: #{pt1(data)}")
-    IO.puts("day 6 pt 2: #{pt2(data)}")
+    Advent2021.print("day 6 part 1", :timer.tc(Day6, :pt1, [data]))
+    Advent2021.print("day 6 part 2", :timer.tc(Day6, :pt2, [data]))
   end
 
   defp parse(data) do

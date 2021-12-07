@@ -16,8 +16,8 @@ defmodule Day1 do
       |> Enum.map(&String.trim/1)
       |> Enum.map(&String.to_integer/1)
 
-    IO.puts("day 1 pt 1: #{pt1(data)}")
-    IO.puts("day 1 pt 2: #{pt2(data)}")
+    Advent2021.print("day 1 part 1", :timer.tc(Day1, :pt1, [data]))
+    Advent2021.print("day 1 part 2", :timer.tc(Day1, :pt2, [data]))
   end
 
   def pt1(data) do

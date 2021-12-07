@@ -28,4 +28,10 @@ defmodule Advent2021 do
     Day7.doit()
     Supervisor.start_link([], strategy: :one_for_one)
   end
+
+  def print(str, {time, value}) do
+    value = value |> Integer.to_string |> String.pad_trailing(20, " ")
+    time = div(time, 1000) |> Integer.to_string |> String.pad_leading(3, " ")
+    IO.puts("#{str} = #{value} ( #{time} ms )")
+  end
 end
