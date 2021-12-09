@@ -94,11 +94,16 @@ defmodule Day9 do
     data =
       data
       |> parse
+    i_range = 0..(length(data) - 1)
+    j_range = 0..(length(List.first(data)) - 1)
 
-    Enum.reduce(0..(length(data) - 1), [], fn i, pts ->
-        Enum.reduce(0..(length(Enum.at(data, i)) - 1), pts, fn j, pts ->
-          v = get_value(data, i, j)
-          if is_lowest_point(data, i, j), do: [v + 1 | pts], else: pts
+    Enum.reduce(i_range, [], fn i, points ->
+        Enum.reduce(j_range, points, fn j, points ->
+          if is_lowest_point(data, i, j) do
+            [get_value(data, i, j) + 1 | points]
+          else
+            points
+          end
         end)
     end)
     |> Enum.sum()
@@ -109,16 +114,17 @@ defmodule Day9 do
       data
       |> parse
       |> add_seen
+    i_range = 0..(length(data) - 1)
+    j_range = 0..(length(List.first(data)) - 1)
 
-    Enum.reduce(0..(length(data) - 1), {data, []}, fn i, {data, sizes} ->
-        Enum.reduce(0..(length(Enum.at(data, i)) - 1), {data, sizes}, fn j, {data, sizes} ->
-          {data, v} = find_basin_size(data, i, j)
-          {data, [v | sizes]}
+    Enum.reduce(i_range, {data, []}, fn i, {data, sizes} ->
+        Enum.reduce(j_range, {data, sizes}, fn j, {data, sizes} ->
+          {data, size} = find_basin_size(data, i, j)
+          {data, [size | sizes]}
         end)
     end)
     |> elem(1)
-    |> Enum.sort()
-    |> Enum.reverse()
+    |> Enum.sort(:desc)
     |> Enum.take(3)
     |> Enum.product()
   end
