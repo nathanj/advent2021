@@ -49,21 +49,24 @@ defmodule Day9 do
     end)
   end
 
-  defp add_bounding_box(data) do
-    horizontal_padded =
-      data
-      |> Enum.map(fn x -> [10] ++ x ++ [10] end)
+  defp get_value(data, i, j) do
+    if i < 0 or i >= length(data) or j < 0 or j >= length(List.first(data)) do
+      9
+    else
+      Enum.at(Enum.at(data, i), j)
+    end
+  end
 
-    row_padding =
-      horizontal_padded
-      |> List.first()
-      |> Enum.map(fn _ -> 10 end)
-
-    [row_padding] ++ horizontal_padded ++ [row_padding]
+  defp get_value_seen(data, i, j) do
+    if i < 0 or i >= length(data) or j < 0 or j >= length(List.first(data)) do
+      {9, true}
+    else
+      Enum.at(Enum.at(data, i), j)
+    end
   end
 
   defp find_basin_size(data, i, j) do
-    {v, seen} = Enum.at(Enum.at(data, i), j)
+    {v, seen} = get_value_seen(data, i, j)
 
     if seen or v >= 9 do
       {data, 0}
@@ -78,11 +81,11 @@ defmodule Day9 do
   end
 
   defp is_lowest_point(data, i, j) do
-    v = Enum.at(Enum.at(data, i), j)
-    n = Enum.at(Enum.at(data, i - 1), j)
-    s = Enum.at(Enum.at(data, i + 1), j)
-    w = Enum.at(Enum.at(data, i), j - 1)
-    e = Enum.at(Enum.at(data, i), j + 1)
+    v = get_value(data, i, j)
+    n = get_value(data, i - 1, j)
+    s = get_value(data, i + 1, j)
+    w = get_value(data, i, j - 1)
+    e = get_value(data, i, j + 1)
 
     v < n and v < s and v < w and v < e
   end
@@ -91,11 +94,10 @@ defmodule Day9 do
     data =
       data
       |> parse
-      |> add_bounding_box
 
-    Enum.reduce(1..(length(data) - 2), [], fn i, pts ->
-        Enum.reduce(1..(length(Enum.at(data, i)) - 2), pts, fn j, pts ->
-          v = Enum.at(Enum.at(data, i), j)
+    Enum.reduce(0..(length(data) - 1), [], fn i, pts ->
+        Enum.reduce(0..(length(Enum.at(data, i)) - 1), pts, fn j, pts ->
+          v = get_value(data, i, j)
           if is_lowest_point(data, i, j), do: [v + 1 | pts], else: pts
         end)
     end)
@@ -106,11 +108,10 @@ defmodule Day9 do
     data =
       data
       |> parse
-      |> add_bounding_box
       |> add_seen
 
-    Enum.reduce(1..(length(data) - 2), {data, []}, fn i, {data, sizes} ->
-        Enum.reduce(1..(length(Enum.at(data, i)) - 2), {data, sizes}, fn j, {data, sizes} ->
+    Enum.reduce(0..(length(data) - 1), {data, []}, fn i, {data, sizes} ->
+        Enum.reduce(0..(length(Enum.at(data, i)) - 1), {data, sizes}, fn j, {data, sizes} ->
           {data, v} = find_basin_size(data, i, j)
           {data, [v | sizes]}
         end)
