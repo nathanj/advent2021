@@ -28,6 +28,7 @@ defmodule Advent2021 do
     Day7.doit()
     Day8.doit()
     Day9.doit()
+    Day10.doit()
     Supervisor.start_link([], strategy: :one_for_one)
   end
 
