@@ -36,8 +36,8 @@ defmodule Day4 do
   end
 
   def doit(data) do
-    Advent2021.print("day 4 part 1", :timer.tc(Day4, :pt1, [data]))
-    Advent2021.print("day 4 part 2", :timer.tc(Day4, :pt2, [data]))
+    Advent2021.print("day  4 part 1", :timer.tc(Day4, :pt1, [data]))
+    Advent2021.print("day  4 part 2", :timer.tc(Day4, :pt2, [data]))
   end
 
   defp is_called(num), do: num >= 10000

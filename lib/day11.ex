@@ -46,6 +46,7 @@ defmodule Day11 do
   end
 
   defp grid_get(grid, i, j), do: Enum.at(Enum.at(grid, i), j)
+
   defp grid_replace(grid, i, j, value) do
     List.replace_at(grid, i, List.replace_at(Enum.at(grid, i), j, value))
   end
@@ -101,7 +102,7 @@ defmodule Day11 do
 
     Enum.reduce(i_range, {grid, 0}, fn i, {grid, flashes} ->
       Enum.reduce(j_range, {grid, flashes}, fn j, {grid, flashes} ->
-        octopus = grid_get(grid, i ,j)
+        octopus = grid_get(grid, i, j)
 
         if octopus.value > 9 and !octopus.flashed do
           grid = grid_replace(grid, i, j, %{octopus | flashed: true})

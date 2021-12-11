@@ -25,8 +25,8 @@ defmodule Day9 do
   end
 
   def doit(data) do
-    Advent2021.print("day 9 part 1", :timer.tc(Day9, :pt1, [data]))
-    Advent2021.print("day 9 part 2", :timer.tc(Day9, :pt2, [data]))
+    Advent2021.print("day  9 part 1", :timer.tc(Day9, :pt1, [data]))
+    Advent2021.print("day  9 part 2", :timer.tc(Day9, :pt2, [data]))
   end
 
   defp parse(data) do

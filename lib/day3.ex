@@ -29,8 +29,8 @@ defmodule Day3 do
       File.stream!("inputs/day3.txt")
       |> Enum.map(&String.trim/1)
 
-    Advent2021.print("day 3 part 1", :timer.tc(Day3, :pt1, [data]))
-    Advent2021.print("day 3 part 2", :timer.tc(Day3, :pt2, [data]))
+    Advent2021.print("day  3 part 1", :timer.tc(Day3, :pt1, [data]))
+    Advent2021.print("day  3 part 2", :timer.tc(Day3, :pt2, [data]))
   end
 
   defp count_zeroes(data) do

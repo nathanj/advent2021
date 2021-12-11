@@ -15,8 +15,8 @@ defmodule Day2 do
       File.stream!("inputs/day2.txt")
       |> Enum.map(&String.trim/1)
 
-    Advent2021.print("day 2 part 1", :timer.tc(Day2, :pt1, [data]))
-    Advent2021.print("day 2 part 2", :timer.tc(Day2, :pt2, [data]))
+    Advent2021.print("day  2 part 1", :timer.tc(Day2, :pt1, [data]))
+    Advent2021.print("day  2 part 2", :timer.tc(Day2, :pt2, [data]))
   end
 
   def handle_cmd(cmd, state) do
