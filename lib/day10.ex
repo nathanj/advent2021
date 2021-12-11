@@ -49,21 +49,21 @@ defmodule Day10 do
   end
 
   defp compute_line(str) do
-      str
-      |> String.graphemes()
-      |> Enum.reduce_while([], fn ch, stack ->
-        if ch == "}" or ch == "]" or ch == ">" or ch == ")" do
-          {ch2, stack} = List.pop_at(stack, 0)
+    str
+    |> String.graphemes()
+    |> Enum.reduce_while([], fn ch, stack ->
+      if ch == "}" or ch == "]" or ch == ">" or ch == ")" do
+        {ch2, stack} = List.pop_at(stack, 0)
 
-          if reverse_char(ch) == ch2 do
-            {:cont, stack}
-          else
-            {:halt, ch}
-          end
+        if reverse_char(ch) == ch2 do
+          {:cont, stack}
         else
-          {:cont, [ch | stack]}
+          {:halt, ch}
         end
-      end)
+      else
+        {:cont, [ch | stack]}
+      end
+    end)
   end
 
   defp score_corrupt_char(ch) do
@@ -107,7 +107,7 @@ defmodule Day10 do
     |> Enum.map(&compute_line/1)
     |> Enum.filter(&is_list/1)
     |> Enum.map(&score_incomplete_line/1)
-    |> Enum.sort
+    |> Enum.sort()
     |> middle_elem
   end
 end
