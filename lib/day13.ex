@@ -75,39 +75,42 @@ defmodule Day13 do
     |> then(fn [x, y] -> {parse_points(x), parse_instructions(y)} end)
   end
 
-  defp fold_paper(grid, {direction, position}) do
-    length_y = Matrix.height(grid)
-    length_x = Matrix.width(grid)
-
-    map = Matrix.to_sparse_map(grid)
-
-    if direction == :y do
-      new_length_y = max(position, length_y - position)
-      new_grid = Matrix.new(new_length_y, length_x)
-
-      Enum.reduce(1..(new_length_y - 1), new_grid, fn y, new_grid ->
-        Enum.reduce(0..(length_x - 1), new_grid, fn x, new_grid ->
-          if Map.get(map, [position - y, x]) != nil or Map.get(map, [position + y, x]) != nil do
-            put_in(new_grid[position - y][x], 1)
-          else
-            new_grid
-          end
-        end)
-      end)
+  defp fold_paper({grid, height, width}, {direction, position}) when direction == :y do
+    new_height = max(position, height - position) - 1
+    offset = if div(height, 2) > position do
+      height - 2 * position
     else
-      new_length_x = max(position, length_x - position)
-      new_grid = Matrix.new(length_y, new_length_x)
-
-      Enum.reduce(0..(length_y - 1), new_grid, fn y, new_grid ->
-        Enum.reduce(1..(new_length_x - 1), new_grid, fn x, new_grid ->
-          if Map.get(map, [y, position - x]) != nil or Map.get(map, [y, position + x]) != nil do
-            put_in(new_grid[y][position - x], 1)
-          else
-            new_grid
-          end
-        end)
-      end)
+      0
     end
+
+    grid = Enum.reduce(Map.keys(grid), %{}, fn [y, x], new_grid ->
+      if y < position do
+        Map.put(new_grid, [offset + y, x], 1)
+      else
+        Map.put(new_grid, [position - (y - position) + offset, x], 1)
+      end
+    end)
+
+    {grid, new_height, width}
+  end
+
+  defp fold_paper({grid, height, width}, {direction, position}) when direction == :x do
+    new_width = max(position, width - position) - 1
+    offset = if div(width, 2) > position do
+      width - 2 * position
+    else
+      0
+    end
+
+    grid = Enum.reduce(Map.keys(grid), %{}, fn [y, x], new_grid ->
+      if x < position do
+        Map.put(new_grid, [y, offset + x], 1)
+      else
+        Map.put(new_grid, [y, position - (x - position) + offset], 1)
+      end
+    end)
+
+    {grid, height, new_width}
   end
 
   defp print_digits(data) do
@@ -125,21 +128,21 @@ defmodule Day13 do
   end
 
   defp create_grid(points) do
-    max_x =
-      points
+    width =
+      (points
       |> Enum.map(&Enum.at(&1, 0))
-      |> Enum.max()
+      |> Enum.max()) + 1
 
-    max_y =
-      points
+    height =
+      (points
       |> Enum.map(&Enum.at(&1, 1))
-      |> Enum.max()
+      |> Enum.max()) + 1
 
-    grid = Matrix.new(max_y + 1, max_x + 1)
+    grid = points
+    |> Enum.map(fn [x, y] -> [y, x] end)
+    |> Enum.frequencies
 
-    Enum.reduce(points, grid, fn [x, y], grid ->
-      put_in(grid[y][x], 1)
-    end)
+    {grid, height, width}
   end
 
   def pt1(data) do
@@ -152,8 +155,8 @@ defmodule Day13 do
     |> Enum.reduce(grid, fn instruction, grid ->
       fold_paper(grid, instruction)
     end)
-    |> Enum.map(&Enum.sum/1)
-    |> Enum.sum()
+    |> elem(0)
+    |> map_size
   end
 
   def pt2(data) do
@@ -165,6 +168,7 @@ defmodule Day13 do
     |> Enum.reduce(grid, fn instruction, grid ->
       fold_paper(grid, instruction)
     end)
+    |> then(fn {grid, height, width} -> Matrix.from_sparse_map(grid, height, width) end)
     |> print_digits
     |> then(fn _ -> 0 end)
   end
