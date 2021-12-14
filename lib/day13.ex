@@ -77,38 +77,44 @@ defmodule Day13 do
 
   defp fold_paper({grid, height, width}, {direction, position}) when direction == :y do
     new_height = max(position, height - position) - 1
-    offset = if div(height, 2) > position do
-      height - 2 * position
-    else
-      0
-    end
 
-    grid = Enum.reduce(Map.keys(grid), %{}, fn [y, x], new_grid ->
-      if y < position do
-        Map.put(new_grid, [offset + y, x], 1)
+    offset =
+      if div(height, 2) > position do
+        height - 2 * position
       else
-        Map.put(new_grid, [position - (y - position) + offset, x], 1)
+        0
       end
-    end)
+
+    grid =
+      Enum.reduce(Map.keys(grid), %{}, fn [y, x], new_grid ->
+        if y < position do
+          Map.put(new_grid, [offset + y, x], 1)
+        else
+          Map.put(new_grid, [position - (y - position) + offset, x], 1)
+        end
+      end)
 
     {grid, new_height, width}
   end
 
   defp fold_paper({grid, height, width}, {direction, position}) when direction == :x do
     new_width = max(position, width - position) - 1
-    offset = if div(width, 2) > position do
-      width - 2 * position
-    else
-      0
-    end
 
-    grid = Enum.reduce(Map.keys(grid), %{}, fn [y, x], new_grid ->
-      if x < position do
-        Map.put(new_grid, [y, offset + x], 1)
+    offset =
+      if div(width, 2) > position do
+        width - 2 * position
       else
-        Map.put(new_grid, [y, position - (x - position) + offset], 1)
+        0
       end
-    end)
+
+    grid =
+      Enum.reduce(Map.keys(grid), %{}, fn [y, x], new_grid ->
+        if x < position do
+          Map.put(new_grid, [y, offset + x], 1)
+        else
+          Map.put(new_grid, [y, position - (x - position) + offset], 1)
+        end
+      end)
 
     {grid, height, new_width}
   end
@@ -130,17 +136,18 @@ defmodule Day13 do
   defp create_grid(points) do
     width =
       (points
-      |> Enum.map(&Enum.at(&1, 0))
-      |> Enum.max()) + 1
+       |> Enum.map(&Enum.at(&1, 0))
+       |> Enum.max()) + 1
 
     height =
       (points
-      |> Enum.map(&Enum.at(&1, 1))
-      |> Enum.max()) + 1
+       |> Enum.map(&Enum.at(&1, 1))
+       |> Enum.max()) + 1
 
-    grid = points
-    |> Enum.map(fn [x, y] -> [y, x] end)
-    |> Enum.frequencies
+    grid =
+      points
+      |> Enum.map(fn [x, y] -> [y, x] end)
+      |> Enum.frequencies()
 
     {grid, height, width}
   end
